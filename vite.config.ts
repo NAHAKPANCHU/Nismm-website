@@ -6,11 +6,13 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
  server: {
-  host: "::",
-  port: 8080,
-  allowedHosts: [
-   "0820cd1a6ea2.ngrok-free.app", // <-- your ngrok domain here
-  ],
+  allowedHosts: ["d5795509211f.ngrok-free.app"],
+  proxy: {
+   "/api": {
+    target: "http://localhost:8000",
+    changeOrigin: true,
+   },
+  },
  },
  plugins: [react(), mode === "development" && componentTagger()].filter(
   Boolean

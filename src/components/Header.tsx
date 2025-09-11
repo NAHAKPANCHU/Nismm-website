@@ -10,9 +10,8 @@ import { Input } from './ui/input';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { items } = useCartStore();
   const location = useLocation();
-
+  const { items, setCartOpen } = useCartStore();
   const cartItemsCount = items.reduce((total, item) => total + item.quantity, 0);
 
   const navLinks = [
@@ -33,8 +32,12 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 hover-scale">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">N</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img
+                src="/logo.jpg"
+                alt="Nismm Logo"
+                className="w-8 h-8 object-contain rounded-lg"
+              />
             </div>
             <span className="text-xl font-poppins font-bold text-gradient">Nismm</span>
           </Link>
@@ -87,7 +90,12 @@ const Header = () => {
             </Link>
 
             {/* Cart */}
-            <Button variant="ghost" size="sm" className="relative hover-scale">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="relative hover-scale"
+              onClick={() => setCartOpen(true)} // 👈 open CartDrawer when clicked
+            >
               <ShoppingCart className="w-5 h-5" />
               {cartItemsCount > 0 && (
                 <Badge className="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 flex items-center justify-center p-0 animate-pulse-custom">

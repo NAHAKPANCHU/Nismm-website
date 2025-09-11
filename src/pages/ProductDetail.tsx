@@ -196,7 +196,7 @@ const ProductDetail = () => {
                 </span>
                 {product.originalPrice && (
                   <span className="text-xl text-gray-500 line-through">
-                    ${product.originalPrice}
+                    ₹{product.originalPrice}
                   </span>
                 )}
               </div>
@@ -262,7 +262,7 @@ const ProductDetail = () => {
                   </button>
                 </div>
                 <span className="text-gray-600">
-                  ${(product.price * quantity).toFixed(2)} total
+                  ₹{(product.price * quantity).toFixed(2)} total
                 </span>
               </div>
 
@@ -296,7 +296,7 @@ const ProductDetail = () => {
             <div className="grid grid-cols-2 gap-4 py-6 border-t border-b">
               <div className="flex items-center gap-3">
                 <Truck className="w-5 h-5 text-primary" />
-                <span className="text-sm text-gray-600">Free shipping over $100</span>
+                <span className="text-sm text-gray-600">Free shipping over ₹100</span>
               </div>
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-primary" />

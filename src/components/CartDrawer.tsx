@@ -1,20 +1,29 @@
 
-import { useEffect } from 'react';
-import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
+import { Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useCartStore } from '../store/cartStore';
 import { Button } from './ui/button';
 
 const CartDrawer = () => {
-  const { 
-    items, 
-    isCartOpen, 
-    setCartOpen, 
-    updateQuantity, 
-    removeFromCart, 
+  const {
+    items,
+    isCartOpen,
+    setCartOpen,
+    updateQuantity,
+    removeFromCart,
     getTotalPrice,
-    getTotalItems 
+    getTotalItems,
+    clearCart
   } = useCartStore();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    whatsappNumber: '',
+    address: ''
+  });
+  const [showOrderForm, setShowOrderForm] = useState(false);
 
   // Prevent body scroll when cart is open
   useEffect(() => {
@@ -23,11 +32,102 @@ const CartDrawer = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isCartOpen]);
+
+  // WhatsApp configuration
+  // const whatsappNumber = "918160718580";
+  // const businessName = "Nismm";
+  // const adminWhatsApp = "918160718580"; // Admin WhatsApp for notifications
+
+  // Create order in database and send WhatsApp message
+  const handleWhatsAppOrder = async () => {
+    if (!customerInfo.name || !customerInfo.whatsappNumber || !customerInfo.address) {
+      setShowOrderForm(true);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Prepare order data
+      const orderData = {
+        customerName: customerInfo.name,
+        whatsappNumber: customerInfo.whatsappNumber,
+        address: customerInfo.address,
+        products: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        totalAmount: getTotalPrice()
+      };
+
+      // Create order in database
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        const order = result.data;
+        const whatsappUrl = result.whatsappUrl; // ✅ from backend
+
+        // Open WhatsApp link (admin message)
+        if (whatsappUrl) {
+          window.open(whatsappUrl, "_blank");
+        }
+
+        // Clear cart and close drawer
+        clearCart();
+        setCartOpen(false);
+        setShowOrderForm(false);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('Failed to create order. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // const sendCustomerWhatsAppMessage = async (order) => {
+  //   // Create customer order summary
+  //   let orderDetails = `🎉 Thank you for your order from ${businessName}!\n\n`;
+  //   orderDetails += `📋 Order Details:\n`;
+  //   orderDetails += `🆔 Order ID: ${order._id}\n`;
+  //   orderDetails += `📅 Date: ${new Date(order.orderDate).toLocaleDateString()}\n\n`;
+
+  //   orderDetails += `📦 Items:\n`;
+  //   order.products.forEach((item, index) => {
+  //     orderDetails += `${index + 1}. ${item.name}\n`;
+  //     orderDetails += `   Quantity: ${item.quantity}\n`;
+  //     orderDetails += `   Price: ₹${item.price}\n`;
+  //     orderDetails += `   Subtotal: ₹${(item.price * item.quantity).toFixed(2)}\n\n`;
+  //   });
+
+  //   orderDetails += `💰 Total Amount: ₹${order.totalAmount.toFixed(2)}\n\n`;
+  //   orderDetails += `⏰ Status: ${order.status.toUpperCase()}\n\n`;
+  //   orderDetails += `We'll contact you soon for payment and delivery details.\n`;
+  //   orderDetails += `Thank you for choosing ${businessName}! 🙏`;
+
+  //   const encodedMessage = encodeURIComponent(orderDetails);
+  //   const whatsappUrl = `https://wa.me/${customerInfo.whatsappNumber.replace(/\D/g, '')}?text=${encodedMessage}`;
+
+  //   // Open WhatsApp to send message to customer
+  //   window.open(whatsappUrl, '_blank');
+  // };
+
 
   const freeShippingThreshold = 100;
   const totalPrice = getTotalPrice();
@@ -39,7 +139,7 @@ const CartDrawer = () => {
   return (
     <>
       {/* Overlay */}
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300"
         onClick={() => setCartOpen(false)}
       />
@@ -65,13 +165,59 @@ const CartDrawer = () => {
         {remainingForFreeShipping > 0 && (
           <div className="p-4 bg-echoshop-gray border-b border-gray-200">
             <div className="text-sm text-gray-600 mb-2">
-              Add <span className="font-semibold text-primary">${remainingForFreeShipping.toFixed(2)}</span> more for free shipping!
+              Add <span className="font-semibold text-primary">₹{remainingForFreeShipping.toFixed(2)}</span> more for free shipping!
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
+              <div
                 className="bg-gradient-primary h-2 rounded-full transition-all duration-500"
                 style={{ width: `${freeShippingProgress}%` }}
               />
+            </div>
+          </div>
+        )}
+
+        {/* Customer Info Form */}
+        {showOrderForm && (
+          <div className="p-4 bg-blue-50 border-b border-blue-200">
+            <h3 className="font-medium text-blue-900 mb-3">Order Information</h3>
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Your Full Name"
+                value={customerInfo.name}
+                onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="tel"
+                placeholder="WhatsApp Number (e.g., +919876543210)"
+                value={customerInfo.whatsappNumber}
+                onChange={(e) => setCustomerInfo({ ...customerInfo, whatsappNumber: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="text"
+                placeholder="Shipping Address"
+                value={customerInfo.address}
+                onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex space-x-2">
+                <Button
+                  onClick={() => setShowOrderForm(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleWhatsAppOrder}
+                  disabled={!customerInfo.name || !customerInfo.whatsappNumber || !customerInfo.address || isLoading}
+                  className="flex-1 btn-primary"
+                >
+                  {isLoading ? 'Creating Order...' : 'Place Order'}
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -102,7 +248,7 @@ const CartDrawer = () => {
                     alt={item.name}
                     className="w-16 h-16 object-cover rounded-lg"
                   />
-                  
+
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm text-gray-900 truncate">
@@ -110,13 +256,13 @@ const CartDrawer = () => {
                     </h4>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-lg font-bold text-primary">
-                        ${item.price}
+                        ₹{item.price}
                       </span>
                       <span className="text-sm text-gray-500">
                         Stock: {item.stock}
                       </span>
                     </div>
-                    
+
                     {/* Quantity Controls */}
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center space-x-2">
@@ -141,7 +287,7 @@ const CartDrawer = () => {
                           <Plus className="w-3 h-3" />
                         </Button>
                       </div>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
@@ -164,16 +310,21 @@ const CartDrawer = () => {
             {/* Subtotal */}
             <div className="flex justify-between items-center text-lg font-bold">
               <span>Subtotal:</span>
-              <span className="text-primary">${totalPrice.toFixed(2)}</span>
+              <span className="text-primary">₹{totalPrice.toFixed(2)}</span>
             </div>
-            
-            {/* Checkout Buttons */}
+
+            {/* Order Buttons */}
             <div className="space-y-3">
-              <Link to="/checkout" onClick={() => setCartOpen(false)}>
-                <Button className="w-full btn-primary text-lg py-3">
-                  Checkout Now
-                </Button>
-              </Link>
+              <Button
+                onClick={handleWhatsAppOrder}
+                disabled={isLoading}
+                className="w-full btn-primary text-lg py-3 bg-green-600 hover:bg-green-700"
+              >
+                {isLoading ? 'Creating Order...' : '📱 Place Order via WhatsApp'}
+              </Button>
+
+
+
               <Button
                 variant="outline"
                 onClick={() => setCartOpen(false)}
@@ -182,13 +333,13 @@ const CartDrawer = () => {
                 Continue Shopping
               </Button>
             </div>
-            
+
             {/* Trust Badges */}
             <div className="text-center text-xs text-gray-500 mt-4">
               <div className="flex justify-center space-x-4">
-                <span>✓ Secure Checkout</span>
-                <span>✓ Free Returns</span>
-                <span>✓ 24/7 Support</span>
+                <span>✓ Order Tracking</span>
+                <span>✓ WhatsApp Support</span>
+                <span>✓ Quick Response</span>
               </div>
             </div>
           </div>

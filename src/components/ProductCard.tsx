@@ -1,5 +1,4 @@
-
-import { Eye, Heart, ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Star } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../data/products';
@@ -103,7 +102,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
               </div>
               <div className="flex flex-col items-end justify-between ml-6">
                 <div className="text-right mb-4">
-                  <p className="text-2xl font-bold text-gray-900">${product.price}</p>
+                  <p className="text-2xl font-bold text-gray-900">₹{product.price}</p>
                   <p className="text-sm text-gray-500">In stock: {product.stock}</p>
                 </div>
                 <div className="flex space-x-2">
@@ -135,7 +134,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
   return (
     <Link
       to={`/product/${product.id}`}
-      className="block group relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300"
+      className="block group relative bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full"
       style={{
         animationDelay: `${index * 100}ms`,
         animationFillMode: 'both'
@@ -159,14 +158,13 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
 
         {/* Badges */}
         <div className="absolute top-3 left-3 space-y-1">
-
           {product.tags?.includes('new') && (
             <Badge className="bg-accent text-white text-xs">
               New
             </Badge>
           )}
           {product.originalPrice && (
-            <Badge className="  text-secondary-foreground text-xs">
+            <Badge className="text-secondary-foreground text-xs">
               Sale
             </Badge>
           )}
@@ -184,26 +182,6 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
             className={`w-4 h-4 ${isInWishlistState ? 'fill-current' : ''}`}
           />
         </button>
-
-        {/* Quick View Overlay */}
-        {showQuickView && (
-          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-            <div className="flex space-x-2">
-              <Button
-                size="sm"
-                className="bg-white text-gray-900 hover:bg-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  // Quick view modal would open here
-                }}
-              >
-                <Eye className="w-4 h-4 mr-1" />
-                Quick View
-              </Button>
-            </div>
-          </div>
-        )}
 
         {/* Stock indicator */}
         {product.stock < 10 && product.stock > 0 && (
@@ -223,8 +201,8 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="p-4">
+      {/* Product Info - Fixed structure */}
+      <div className="p-4 flex flex-col flex-1">
         {/* Category */}
         <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
           {product.category}
@@ -246,29 +224,28 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
         </div>
 
         {/* Price */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <span className="text-lg font-bold text-primary">
-              ${product.price}
+        <div className="flex items-center space-x-2 mb-4">
+          <span className="text-lg font-bold text-primary">
+            ₹{product.price}
+          </span>
+          {product.originalPrice && (
+            <span className="text-sm text-gray-500 line-through">
+              ₹{product.originalPrice}
             </span>
-            {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through">
-                ${product.originalPrice}
-              </span>
-            )}
-          </div>
-
+          )}
         </div>
 
-        {/* Add to Cart Button */}
-        <Button
-          onClick={handleAddToCart}
-          disabled={product.stock === 0}
-          className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ShoppingCart className="w-4 h-4 mr-2" />
-          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-        </Button>
+        {/* Button - pushed to bottom with consistent spacing */}
+        <div className="mt-auto">
+          <Button
+            onClick={handleAddToCart}
+            disabled={product.stock === 0}
+            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+          </Button>
+        </div>
       </div>
     </Link>
   );
