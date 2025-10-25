@@ -73,7 +73,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
   if (variant === 'list') {
     return (
       <Link to={`/product/${product.id}`} className="block">
-        <div className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-all duration-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden">
           <div className="flex">
             <div className="w-48 h-32 flex-shrink-0">
               <img
@@ -107,10 +107,9 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
                 </div>
                 <div className="flex space-x-2">
                   <Button
-                    variant="outline"
                     size="sm"
                     onClick={handleWishlistToggle}
-                    className={`p-2 ${isInWishlistState ? 'text-red-500 border-red-500' : ''}`}
+                    className={`p-2 ${isInWishlistState ? 'text-red-500' : 'text-white hover:text-red-500'}`}
                   >
                     <Heart className={`w-4 h-4 ${isInWishlistState ? 'fill-current' : ''}`} />
                   </Button>
@@ -157,7 +156,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
         />
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 space-y-1">
+        {/* <div className="absolute top-3 left-3 space-y-1">
           {product.tags?.includes('new') && (
             <Badge className="bg-accent text-white text-xs">
               New
@@ -168,7 +167,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
               Sale
             </Badge>
           )}
-        </div>
+        </div> */}
 
         {/* Wishlist Button */}
         <button
@@ -209,9 +208,10 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
         </div>
 
         {/* Product Name */}
-        <h3 className="font-poppins font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className="font-poppins font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors text-base sm:text-base md:text-lg">
           {product.name}
         </h3>
+
 
         {/* Rating */}
         <div className="flex items-center space-x-1 mb-2">

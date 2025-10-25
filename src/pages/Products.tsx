@@ -1,52 +1,70 @@
-import { Filter, Grid, List, Search, Star, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import CartDrawer from '../components/CartDrawer';
-import Header from '../components/Header';
-import ProductCard from '../components/ProductCard';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Slider } from '../components/ui/slider';
-import { categories, genderFilters, products } from '../data/products';
+import { Filter, Grid, List, Search, Star, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import CartDrawer from "../components/CartDrawer";
+import Header from "../components/Header";
+import ProductCard from "../components/ProductCard";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Slider } from "../components/ui/slider";
+import { categories, genderFilters, products } from "../data/products";
 
 const Products = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedGender, setSelectedGender] = useState('All');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedGender, setSelectedGender] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [minRating, setMinRating] = useState(0);
-  const [sortBy, setSortBy] = useState('name');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState("name");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
-    let filtered = products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    let filtered = products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-      const matchesGender = selectedGender === 'All' || product.gender === selectedGender || product.gender === 'Unisex';
-      const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      const matchesCategory =
+        selectedCategory === "All" || product.category === selectedCategory;
+      const matchesGender =
+        selectedGender === "All" ||
+        product.gender === selectedGender ||
+        product.gender === "Unisex";
+      const matchesPrice =
+        product.price >= priceRange[0] && product.price <= priceRange[1];
       const matchesRating = product.rating >= minRating;
 
-      return matchesSearch && matchesCategory && matchesGender && matchesPrice && matchesRating;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesGender &&
+        matchesPrice &&
+        matchesRating
+      );
     });
 
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'price-low':
+        case "price-low":
           return a.price - b.price;
-        case 'price-high':
+        case "price-high":
           return b.price - a.price;
-        case 'rating':
+        case "rating":
           return b.rating - a.rating;
-        case 'name':
+        case "name":
         default:
           return a.name.localeCompare(b.name);
       }
     });
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedGender, priceRange, minRating, sortBy]);
-
+  }, [
+    searchTerm,
+    selectedCategory,
+    selectedGender,
+    priceRange,
+    minRating,
+    sortBy,
+  ]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -64,7 +82,7 @@ const Products = () => {
       <div className="mb-6">
         <h4 className="font-medium mb-3 text-gray-800">Category</h4>
         <div className="space-y-2">
-          {categories.map(category => (
+          {categories.map((category) => (
             <label key={category} className="flex items-center">
               <input
                 type="radio"
@@ -84,7 +102,7 @@ const Products = () => {
       <div className="mb-6">
         <h4 className="font-medium mb-3 text-gray-800">Gender</h4>
         <div className="space-y-2">
-          {genderFilters.map(gender => (
+          {genderFilters.map((gender) => (
             <label key={gender} className="flex items-center">
               <input
                 type="radio"
@@ -120,7 +138,7 @@ const Products = () => {
       <div>
         <h4 className="font-medium mb-3 text-gray-800">Minimum Rating</h4>
         <div className="space-y-2">
-          {[4, 3, 2, 1, 0].map(rating => (
+          {[4, 3, 2, 1, 0].map((rating) => (
             <label key={rating} className="flex items-center">
               <input
                 type="radio"
@@ -134,11 +152,12 @@ const Products = () => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-4 h-4 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      }`}
                   />
                 ))}
                 <span className="ml-2 text-sm text-gray-700">
-                  {rating === 0 ? 'All' : `${rating}+ stars`}
+                  {rating === 0 ? "All" : `${rating}+ stars`}
                 </span>
               </div>
             </label>
@@ -189,22 +208,30 @@ const Products = () => {
 
           {/* View Toggle + Sort */}
           <div className="flex gap-2">
-            <div className="flex border rounded-md bg-white">
+            <div className="flex border border-gray-300 rounded-md bg-white">
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode('grid')}
-                className="rounded-r-none"
-              >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("grid")}
                 className="rounded-l-none"
               >
-                <List className="w-4 h-4" />
+                <Grid
+                  className={`w-4 h-4 transition-colors ${viewMode === "grid"
+                    ? "text-white "
+                    : "text-muted-foreground hover:text-primary"
+                    }`}
+                />
+              </Button>
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+                className="rounded-l-none"
+              >
+                <List
+                  className={`w-4 h-4 ${viewMode === "list" ? "text-white" : "text-muted-foreground"
+                    }`}
+                />
               </Button>
             </div>
 
@@ -224,22 +251,24 @@ const Products = () => {
         {/* Layout */}
         <div className="flex gap-8">
           {/* Desktop Sidebar */}
-          <div className="hidden lg:block w-64">
-            {FiltersContent()}
-          </div>
+          <div className="hidden lg:block w-64">{FiltersContent()}</div>
 
           {/* Products */}
           <div className="flex-1">
             {filteredProducts.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your filters or search terms</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No products found
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Try adjusting your filters or search terms
+                </p>
                 <Button
                   className="bg-primary text-white"
                   onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('All');
-                    setSelectedGender('All');
+                    setSearchTerm("");
+                    setSelectedCategory("All");
+                    setSelectedGender("All");
                     setPriceRange([0, 500]);
                     setMinRating(0);
                   }}
@@ -248,10 +277,13 @@ const Products = () => {
                 </Button>
               </div>
             ) : (
-              <div className={viewMode === 'grid'
-                ? 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6'
-                : 'space-y-4'
-              }>
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
+                    : "space-y-4"
+                }
+              >
                 {filteredProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}

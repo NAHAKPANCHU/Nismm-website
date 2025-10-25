@@ -6,7 +6,7 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
  server: {
-  allowedHosts: ["d5795509211f.ngrok-free.app"],
+  allowedHosts: ["6e1ee8a54f94.ngrok-free.app"],
   proxy: {
    "/api": {
     target: "http://localhost:8000",

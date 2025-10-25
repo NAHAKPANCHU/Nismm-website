@@ -1,5 +1,5 @@
 
-import { Clock, Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Clock, Mail, Phone, Send } from 'lucide-react';
 import { useState } from 'react';
 import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
@@ -50,15 +50,15 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Call Us',
-      content: '+91 9999999999',
-      description: 'Mon-Fri: 9AM-6PM'
+      content: '+91 8347946095',
+      description: 'Mon-Saturday: 9AM-6PM'
     },
-    {
-      icon: MapPin,
-      title: 'Visit Us',
-      content: '123 Commerce Street, NY 10001',
-      description: 'Our headquarters'
-    },
+    // {
+    //   icon: MapPin,
+    //   title: 'Visit Us',
+    //   content: '123 Commerce Street, NY 10001',
+    //   description: 'Our headquarters'
+    // },
     {
       icon: Clock,
       title: 'Support Hours',
@@ -194,7 +194,7 @@ const Contact = () => {
             </div>
 
             {/* Map Placeholder */}
-            <div>
+            {/* <div>
               <h2 className="text-3xl font-poppins font-bold text-gray-900 mb-6">
                 Find Us
               </h2>
@@ -230,7 +230,7 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

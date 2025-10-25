@@ -1,5 +1,5 @@
 
-import { Award, ChevronLeft, ChevronRight, Heart, Minus, Plus, RotateCcw, Shield, ShoppingCart, Star, Truck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, Minus, Plus, ShoppingCart, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CartDrawer from '../components/CartDrawer';
@@ -276,7 +276,7 @@ const ProductDetail = () => {
                   {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                 </Button>
                 <Button
-                  variant="outline"
+
                   onClick={handleWishlistToggle}
                   className={`h-12 px-6 ${isInWishlistState ? 'text-red-500 border-red-500' : ''}`}
                 >
@@ -293,7 +293,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Features */}
-            <div className="grid grid-cols-2 gap-4 py-6 border-t border-b">
+            {/* <div className="grid grid-cols-2 gap-4 py-6 border-t border-b">
               <div className="flex items-center gap-3">
                 <Truck className="w-5 h-5 text-primary" />
                 <span className="text-sm text-gray-600">Free shipping over ₹100</span>
@@ -310,17 +310,17 @@ const ProductDetail = () => {
                 <Award className="w-5 h-5 text-primary" />
                 <span className="text-sm text-gray-600">Authenticity guaranteed</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Product Details Tabs */}
         <div className="mt-16">
-          <Tabs defaultValue="description" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="description" className="w-full ">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-lg">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              {/* <TabsTrigger value="reviews">Reviews</TabsTrigger> */}
             </TabsList>
 
             <TabsContent value="description" className="mt-8">
@@ -350,7 +350,7 @@ const ProductDetail = () => {
                 {product.specifications ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(product.specifications).map(([key, value]) => (
-                      <div key={key} className="flex justify-between py-2 border-b">
+                      <div key={key} className="flex justify-between py-2">
                         <span className="font-medium text-gray-700">{key}:</span>
                         <span className="text-gray-600">{value}</span>
                       </div>
@@ -362,7 +362,7 @@ const ProductDetail = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="reviews" className="mt-8">
+            {/* <TabsContent value="reviews" className="mt-8">
               <div>
                 <h3 className="text-xl font-poppins font-semibold mb-4">Customer Reviews</h3>
                 <div className="text-center py-12 text-gray-500">
@@ -370,7 +370,7 @@ const ProductDetail = () => {
                   <p>Reviews coming soon! Be the first to review this product.</p>
                 </div>
               </div>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
 
@@ -380,7 +380,7 @@ const ProductDetail = () => {
             <h2 className="text-2xl font-poppins font-bold text-gray-900 mb-8">
               Related Products
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct, index) => (
                 <ProductCard
                   key={relatedProduct.id}

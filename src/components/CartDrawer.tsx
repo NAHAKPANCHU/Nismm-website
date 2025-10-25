@@ -2,6 +2,7 @@
 
 import { Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 import { Button } from './ui/button';
 
@@ -25,6 +26,8 @@ const CartDrawer = () => {
   });
   const [showOrderForm, setShowOrderForm] = useState(false);
 
+  const navigate = useNavigate();
+
   // Prevent body scroll when cart is open
   useEffect(() => {
     if (isCartOpen) {
@@ -44,6 +47,65 @@ const CartDrawer = () => {
   // const adminWhatsApp = "918160718580"; // Admin WhatsApp for notifications
 
   // Create order in database and send WhatsApp message
+  // const handleWhatsAppOrder = async () => {
+  //   if (!customerInfo.name || !customerInfo.whatsappNumber || !customerInfo.address) {
+  //     setShowOrderForm(true);
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   try {
+  //     // Prepare order data
+  //     const orderData = {
+  //       customerName: customerInfo.name,
+  //       whatsappNumber: customerInfo.whatsappNumber,
+  //       address: customerInfo.address,
+  //       products: items.map(item => ({
+  //         name: item.name,
+  //         quantity: item.quantity,
+  //         price: item.price
+  //       })),
+  //       totalAmount: getTotalPrice()
+  //     };
+
+  //     // Create order in database
+  //     const response = await fetch('/api/orders', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(orderData)
+  //     });
+
+  //     const result = await response.json();
+
+  //     console.log('Order creation result:', result);
+
+  //     if (result.success) {
+  //       const order = result.data;
+  //       const whatsappUrl = result.whatsappUrl; // ✅ from backend
+
+  //       // Open WhatsApp link (admin message)
+  //       if (whatsappUrl) {
+  //         window.open(whatsappUrl, "_blank");
+  //       }
+
+  //       // Clear cart and close drawer
+  //       clearCart();
+  //       setCartOpen(false);
+  //       setShowOrderForm(false);
+  //     } else {
+  //       throw new Error(result.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error creating order:', error);
+  //     alert('Failed to create order. Please try again.');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const handleWhatsAppOrder = async () => {
     if (!customerInfo.name || !customerInfo.whatsappNumber || !customerInfo.address) {
       setShowOrderForm(true);
@@ -53,7 +115,6 @@ const CartDrawer = () => {
     setIsLoading(true);
 
     try {
-      // Prepare order data
       const orderData = {
         customerName: customerInfo.name,
         whatsappNumber: customerInfo.whatsappNumber,
@@ -66,27 +127,32 @@ const CartDrawer = () => {
         totalAmount: getTotalPrice()
       };
 
-      // Create order in database
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(orderData)
+        credentials: 'include', // ✅ important for sending cookies/JWT
+        body: JSON.stringify(orderData),
       });
+
+      // If user not logged in
+      if (response.status === 401) {
+        setIsLoading(false);
+        alert("Please login or sign up first to place an order.");
+        navigate('/login');
+        return;
+      }
 
       const result = await response.json();
 
       if (result.success) {
-        const order = result.data;
-        const whatsappUrl = result.whatsappUrl; // ✅ from backend
+        const { whatsappUrl } = result;
 
-        // Open WhatsApp link (admin message)
         if (whatsappUrl) {
           window.open(whatsappUrl, "_blank");
         }
 
-        // Clear cart and close drawer
         clearCart();
         setCartOpen(false);
         setShowOrderForm(false);
@@ -100,6 +166,7 @@ const CartDrawer = () => {
       setIsLoading(false);
     }
   };
+
 
   // const sendCustomerWhatsAppMessage = async (order) => {
   //   // Create customer order summary

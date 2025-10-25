@@ -97,12 +97,12 @@ const About = () => {
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-echoshop-gray">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-echoshop-gray bg-white">
+        <div className="container mx-auto px-4 ">
           <h2 className="text-3xl font-poppins font-bold text-center text-gray-900 mb-12">
             Nismm by Numbers
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid  grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group hover-scale">
                 <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200">
@@ -119,7 +119,7 @@ const About = () => {
       </section>
 
       {/* Team */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-poppins font-bold text-gray-900 mb-4">
@@ -151,11 +151,11 @@ const About = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Values */}
-      <section className="py-16 bg-echoshop-gray">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-echoshop-gray bg-white">
+        <div className="container mx-auto px-4 bg-red">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-poppins font-bold text-gray-900 mb-4">
               Our Values

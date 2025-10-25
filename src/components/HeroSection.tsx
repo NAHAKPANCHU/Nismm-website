@@ -63,7 +63,7 @@ const HeroSection = () => {
             <div className="space-y-8 animate-slide-in-left">
               {/* Badge */}
               <div className="inline-flex items-center space-x-2">
-                <Badge className="bg-accent text-white px-4 py-2 text-sm">
+                <Badge className="bg-primary text-white px-4 py-2 text-sm">
                   ✨ New Collection
                 </Badge>
                 <Badge variant="outline" className="border-primary text-primary">

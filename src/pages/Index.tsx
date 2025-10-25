@@ -1,5 +1,5 @@
 
-import { Award, Heart, RefreshCw, Shield, Star, Truck } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
@@ -61,7 +61,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gray-50">
+      {/* <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-poppins font-bold text-gray-900 mb-4">
@@ -134,49 +134,8 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Testimonials Section */}
-      {/* <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-poppins font-bold text-gray-900 mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-lg text-gray-600">
-              Real stories from real customers who love their Ulochan jewelry
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl hover-scale">
-                <div className="flex items-center mb-4">
-                  {renderStars(testimonial.rating)}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "{testimonial.comment}"
-                </p>
-                <div className="flex items-center">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <h4 className="font-poppins font-semibold text-gray-900">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-sm text-gray-600">Verified Customer</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </section> */}
 
-      {/* Newsletter Section */}
       <section className="py-16 bg-gray-900" >
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-poppins font-bold text-white mb-4">
