@@ -60,6 +60,8 @@ export default {
     "brand-dark": "hsl(var(--brand-dark))",
    },
    fontFamily: {
+    inter: ["Inter", "sans-serif"],
+    poppins: ["Poppins", "sans-serif"],
     sans: [
      "Inter",
      "system-ui",
@@ -72,6 +74,7 @@ export default {
     display: ["Inter", "system-ui", "sans-serif"],
     mono: ["JetBrains Mono", "Fira Code", "Monaco", "Consolas", "monospace"],
    },
+
    fontSize: {
     xs: ["0.75rem", { lineHeight: "1rem" }],
     sm: ["0.875rem", { lineHeight: "1.25rem" }],

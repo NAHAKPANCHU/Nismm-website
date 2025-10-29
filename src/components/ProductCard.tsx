@@ -103,7 +103,7 @@ const ProductCard = ({ product, index = 0, variant = 'grid' }: ProductCardProps)
               <div className="flex flex-col items-end justify-between ml-6">
                 <div className="text-right mb-4">
                   <p className="text-2xl font-bold text-gray-900">₹{product.price}</p>
-                  <p className="text-sm text-gray-500">In stock: {product.stock}</p>
+                  {/* <p className="text-sm text-gray-500">In stock: {product.stock}</p> */}
                 </div>
                 <div className="flex space-x-2">
                   <Button

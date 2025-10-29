@@ -1,4 +1,5 @@
 
+import emailjs from '@emailjs/browser';
 import { Clock, Mail, Phone, Send } from 'lucide-react';
 import { useState } from 'react';
 import CartDrawer from '../components/CartDrawer';
@@ -25,20 +26,42 @@ const Contact = () => {
     });
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      await emailjs.send(
+        'default_service',
+        'template_2yw4kyr',
+        {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        'kG-1Oagfj2LVHOzog'
+      );
+
       toast({
         title: "Message sent successfully!",
         description: "We'll get back to you within 24 hours.",
       });
+
       setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
+
 
   const contactInfo = [
     {
@@ -53,12 +76,7 @@ const Contact = () => {
       content: '+91 8347946095',
       description: 'Mon-Saturday: 9AM-6PM'
     },
-    // {
-    //   icon: MapPin,
-    //   title: 'Visit Us',
-    //   content: '123 Commerce Street, NY 10001',
-    //   description: 'Our headquarters'
-    // },
+
     {
       icon: Clock,
       title: 'Support Hours',
@@ -117,6 +135,7 @@ const Contact = () => {
                       Full Name *
                     </label>
                     <Input
+                      className="bg-white border-gray-300"
                       id="name"
                       name="name"
                       type="text"
@@ -131,6 +150,7 @@ const Contact = () => {
                       Email Address *
                     </label>
                     <Input
+                      className="bg-white border-gray-300"
                       id="email"
                       name="email"
                       type="email"
@@ -147,6 +167,7 @@ const Contact = () => {
                     Subject *
                   </label>
                   <Input
+                    className="bg-white border-gray-300"
                     id="subject"
                     name="subject"
                     type="text"
@@ -162,6 +183,7 @@ const Contact = () => {
                     Message *
                   </label>
                   <Textarea
+                    className="bg-white border-gray-300"
                     id="message"
                     name="message"
                     required
@@ -236,7 +258,8 @@ const Contact = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-echoshop-gray">
+      <section className="py-16 bg-echoshop-gray bg-white"
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-poppins font-bold text-gray-900 mb-4">

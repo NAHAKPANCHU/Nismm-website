@@ -83,10 +83,6 @@ export default function Login() {
    // Store tokens and user data
    authApi.storeTokens(response);
 
-   // Show success message
-   console.log('Login successful:', response.data.user.username);
-
-   // Redirect to dashboard or home
    navigate('/');
 
 

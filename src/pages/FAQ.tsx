@@ -1,9 +1,8 @@
 
-import { ChevronDown, ChevronUp, HelpCircle, Search } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
-import { Input } from '../components/ui/input';
 
 const FAQ = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -155,21 +154,6 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Search */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <Input
-              type="text"
-              placeholder="Search FAQs..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </div>
-      </section>
 
       {/* FAQ Content */}
       <section className="py-16 bg-white">
@@ -232,7 +216,7 @@ const FAQ = () => {
       </section>
 
       {/* Contact CTA */}
-      <section className="py-16 bg-echoshop-gray">
+      <section className="py-16 bg-echoshop-gray bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-poppins font-bold text-gray-900 mb-4">
             Still have questions?
@@ -247,12 +231,6 @@ const FAQ = () => {
               className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200 font-semibold"
             >
               Contact Support
-            </a>
-            <a
-              href="mailto:nismm98@gmail.com"
-              className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 font-semibold"
-            >
-              Email Us
             </a>
           </div>
         </div>

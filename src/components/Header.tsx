@@ -1,7 +1,7 @@
-
-import { Heart, Menu, Search, ShoppingCart, X } from 'lucide-react';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { authApi } from '@/services/Apis';
+import { Heart, LogOut, Menu, Package, Search, ShoppingCart, User, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -10,9 +10,36 @@ import { Input } from './ui/input';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const { items, setCartOpen } = useCartStore();
   const cartItemsCount = items.reduce((total, item) => total + item.quantity, 0);
+
+  // Mock user data - replace with actual auth state
+
+
+  const storedUser = typeof window !== 'undefined' ? sessionStorage.getItem('user') : null;
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const isLoggedIn = !!user;
+
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   const navLinks = [
     { to: '/', label: 'Home' },
@@ -25,6 +52,7 @@ const Header = () => {
   const isActivePage = (path: string) => {
     return location.pathname === path;
   };
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
@@ -94,16 +122,91 @@ const Header = () => {
               variant="ghost"
               size="sm"
               className="relative hover-scale"
-              onClick={() => setCartOpen(true)} // 👈 open CartDrawer when clicked
+              onClick={() => setCartOpen(true)}
             >
               <ShoppingCart className="w-5 h-5" />
               {cartItemsCount > 0 && (
-                <Badge className="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 flex items-center justify-center p-0 animate-pulse-custom">
+                <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center p-0 animate-pulse-custom">
                   {cartItemsCount}
                 </Badge>
               )}
             </Button>
 
+            {/* User Account */}
+            <div
+              className="relative"
+              ref={userMenuRef}
+              onMouseEnter={() => setIsUserMenuOpen(true)}
+              onMouseLeave={() => setIsUserMenuOpen(false)}
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hover-scale p-2 hover:bg-muted"
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} // optional: keep click toggle
+              >
+                <User className="w-5 h-5" />
+              </Button>
+
+              {/* User Dropdown Menu */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 animate-fade-in z-50">
+                  {isLoggedIn ? (
+                    <>
+                      {/* User Info */}
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-semibold text-gray-900 truncate">
+                          {user?.fullName || user?.username || "User"}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+
+                      </div>
+
+                      {/* My Orders */}
+                      <Link
+                        to="/orders"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <Package className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm text-gray-700">My Orders</span>
+                      </Link>
+
+                      {/* Logout */}
+                      <button
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                        onClick={async () => {
+                          try {
+                            console.log("Stored token:", sessionStorage.getItem("accessToken"));
+                            await authApi.logout();
+                            setIsUserMenuOpen(false);
+                            navigate('/login');
+
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        }}
+                      >
+                        <LogOut className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm text-gray-700">Logout</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {/* Login */}
+                      <Link
+                        to="/login"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <User className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm text-gray-700">Login</span>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Mobile Menu Toggle */}
             <Button

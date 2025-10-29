@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 /* Modern Design System - Professional Color Palette & Typography */
 @layer base {
@@ -74,8 +75,8 @@
  html,
  body {
   @apply bg-background text-foreground;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-   "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif, system-ui, -apple-system,
+   BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

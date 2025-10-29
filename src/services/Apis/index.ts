@@ -70,6 +70,54 @@ export const authApi = {
   }
  },
 
+ logout: async (): Promise<void> => {
+  try {
+   const token = sessionStorage.getItem("accessToken");
+
+   if (!token) throw new Error("No access token found");
+
+   await axios.post(
+    "/api/users/logout",
+    {},
+    {
+     headers: {
+      Authorization: `Bearer ${token}`,
+     },
+     withCredentials: true, // optional if backend sets any cookies
+    }
+   );
+
+   sessionStorage.clear();
+   console.log("✅ User logged out successfully");
+  } catch (error) {
+   console.error("Logout failed:", handleApiError(error));
+   throw new Error(handleApiError(error));
+  }
+ },
+
+ register: async (userData: {
+  username: string;
+  email: string;
+  password: string;
+ }): Promise<AuthResponse> => {
+  try {
+   const response = await axios.post<AuthResponse>(
+    "/api/users/register",
+    userData,
+    { withCredentials: true }
+   );
+
+   if (!response.data.success) {
+    throw new Error(response.data.message || "Registration failed");
+   }
+
+   return response.data;
+  } catch (error) {
+   console.error("Registration failed:", handleApiError(error));
+   throw new Error(handleApiError(error));
+  }
+ },
+
  // ✅ Optional: Helper to store tokens after login
  storeTokens: (authResponse: AuthResponse) => {
   const { accessToken, refreshToken } = authResponse.data;

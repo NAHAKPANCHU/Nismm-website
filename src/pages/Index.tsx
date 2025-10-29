@@ -1,11 +1,10 @@
 
+import CartDrawer from '@/components/CartDrawer';
 import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
 import ProductCard from '../components/ProductCard';
-import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { products } from '../data/products';
 
@@ -30,7 +29,6 @@ const Index = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge className="bg-accent text-white mb-4">Best Sellers</Badge>
             <h2 className="text-3xl md:text-4xl font-poppins font-bold text-gray-900 mb-4">
               Featured Collection
             </h2>

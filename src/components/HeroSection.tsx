@@ -66,9 +66,7 @@ const HeroSection = () => {
                 <Badge className="bg-primary text-white px-4 py-2 text-sm">
                   ✨ New Collection
                 </Badge>
-                <Badge variant="outline" className="border-primary text-primary">
-                  Free Shipping
-                </Badge>
+
               </div>
 
               {/* Main Heading */}

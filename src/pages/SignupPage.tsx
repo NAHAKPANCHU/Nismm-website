@@ -1,6 +1,7 @@
+import { authApi } from '@/services/Apis';
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface FormData {
  name: string;
@@ -40,6 +41,8 @@ export default function SignUp() {
   }
  };
 
+ const navigate = useNavigate();
+
  const validateEmail = (email: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
  };
@@ -71,11 +74,26 @@ export default function SignUp() {
   return Object.keys(newErrors).length === 0;
  };
 
- const handleSubmit = (e: MouseEvent<HTMLButtonElement>): void => {
+ const handleSubmit = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
   e.preventDefault();
-  if (validateForm()) {
-   alert(`Sign Up successful!\nName: ${formData.name}\nEmail: ${formData.email}`);
+
+  if (!validateForm()) return;
+
+  try {
+   const response = await authApi.register({
+    username: formData.name,
+    email: formData.email,
+    password: formData.password,
+   });
+   alert("Account created successfully! 🎉");
    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+
+   navigate("/login"); // redirect to login
+  } catch (error) {
+   console.error("❌ Signup error:", error);
+   setErrors({
+    submit: error instanceof Error ? error.message : "Signup failed. Please try again.",
+   });
   }
  };
 

@@ -1,5 +1,5 @@
 
-import { Heart, Search, ShoppingCart, Trash2 } from 'lucide-react';
+import { Heart, Search, ShoppingCart, Star, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import CartDrawer from '../components/CartDrawer';
 import Header from '../components/Header';
@@ -62,30 +62,32 @@ const Wishlist = () => {
                 <div className="relative flex-1 max-w-md">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <Input
+
                     type="text"
                     placeholder="Search your wishlist..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-white border-gray-300"
+
                   />
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-gray-600">
                     {filteredWishlist.length} of {wishlist.length} items
                   </span>
-                  {wishlist.length > 0 && (
+                  {/* {wishlist.length > 0 && (
                     <Button
                       variant="outline"
                       onClick={() => {
                         wishlist.forEach(item => addToCart(item));
                         wishlist.forEach(item => removeFromWishlist(item.id));
                       }}
-                      className="hidden sm:flex"
+                      className="hidden sm:flex btn-primary"
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       Move All to Cart
                     </Button>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -164,7 +166,7 @@ const Wishlist = () => {
                       <div className="flex items-center space-x-1 mb-2">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
-                            <Heart
+                            <Star
                               key={i}
                               className={`w-3 h-3 ${i < Math.floor(item.rating)
                                 ? 'fill-yellow-400 text-yellow-400'
@@ -200,10 +202,9 @@ const Wishlist = () => {
                           {item.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                         </Button>
                         <Button
-                          variant="outline"
                           size="sm"
                           asChild
-                          className="px-3"
+                          className="px-3 text-white"
                         >
                           <a href={`/product/${item.id}`}>
                             View
@@ -220,11 +221,9 @@ const Wishlist = () => {
             {wishlist.length > 0 && (
               <div className="mt-12 text-center">
                 <div className="bg-gray-50 rounded-lg p-6">
-                  <h3 className="text-lg font-poppins font-semibold text-gray-900 mb-4">
-                    Quick Actions
-                  </h3>
+
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button
+                    {/* <Button
                       onClick={() => {
                         wishlist.forEach(item => addToCart(item));
                         wishlist.forEach(item => removeFromWishlist(item.id));
@@ -233,9 +232,9 @@ const Wishlist = () => {
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       Move All to Cart
-                    </Button>
+                    </Button> */}
                     <Button
-                      variant="outline"
+                      className="bg-red-500 text-white"
                       onClick={() => {
                         wishlist.forEach(item => removeFromWishlist(item.id));
                       }}
@@ -243,6 +242,7 @@ const Wishlist = () => {
                       <Trash2 className="w-4 h-4 mr-2" />
                       Clear Wishlist
                     </Button>
+
                   </div>
                 </div>
               </div>
